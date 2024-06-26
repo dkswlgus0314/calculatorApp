@@ -10,9 +10,6 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    var numLable = UIView()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
