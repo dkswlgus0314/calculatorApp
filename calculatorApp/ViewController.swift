@@ -9,9 +9,7 @@ import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
-    
-    var viewNum = 0
-    
+    var viewNum = "0"
     var numLabel = UILabel()
     let buttonNums = ["7", "8", "9", "+",
                       "4", "5", "6", "-",
@@ -53,14 +51,29 @@ class ViewController: UIViewController {
             button.setTitle(num, for: .normal)
             button.titleLabel?.font = .boldSystemFont(ofSize: 30)
             button.layer.cornerRadius = 40
-            
             buttonArray.append(button)
             
             if buttonArray.count == 4 {
                 verticalStackView.addArrangedSubview(horizontalStackView(buttonArray))
                 buttonArray = []
             }
+            
+            button.addTarget(self, action: #selector(numButtonTapped), for: .touchDown)
         }
+    }
+    
+    @objc
+    private func numButtonTapped(sender: UIButton) {
+        
+        var userInput = sender.currentTitle!
+        
+        if numLabel.text == "0" {
+            viewNum.removeFirst()
+            viewNum += userInput
+        } else {
+            viewNum += userInput
+        }
+        numLabel.text = viewNum
     }
     
     
@@ -77,11 +90,13 @@ class ViewController: UIViewController {
         //속성
         view.backgroundColor = .black
         
+        numLabel.text = "0"
         numLabel.backgroundColor = .black
         numLabel.textColor = .white
-        numLabel.text = "\(viewNum)"
         numLabel.textAlignment = .right
         numLabel.font = .boldSystemFont(ofSize: 60)
+        numLabel.adjustsFontSizeToFitWidth = true //label 사이즈에 맞게 폰트 크기 자동 조절
+        
         
         //view에
         [numLabel, verticalStackView].forEach{view.addSubview($0)}
@@ -99,7 +114,6 @@ class ViewController: UIViewController {
             $0.top.equalTo(numLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
         }
-        
     }
     
     
