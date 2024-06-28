@@ -10,7 +10,7 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    var viewNum = 123
+    var viewNum = 0
     
     var numLabel = UILabel()
     let buttonNums = ["7", "8", "9", "+",
@@ -45,10 +45,14 @@ class ViewController: UIViewController {
         
         for num in buttonNums {
             let button = UIButton()
+            if Int(num) != nil {
+                button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            } else{
+                button.backgroundColor = .orange
+            }
             button.setTitle(num, for: .normal)
             button.titleLabel?.font = .boldSystemFont(ofSize: 30)
             button.layer.cornerRadius = 40
-            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
             
             buttonArray.append(button)
             
@@ -91,7 +95,7 @@ class ViewController: UIViewController {
         
         verticalStackView.snp.makeConstraints {
             $0.height.equalTo(350)
-            $0.width.equalTo(350)  //button.frame.size.height /width = 80를 생략해도 되는 이유
+            $0.width.equalTo(350)
             $0.top.equalTo(numLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
         }
