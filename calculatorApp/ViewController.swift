@@ -10,48 +10,64 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    var viewNum = 12345
+    var viewNum = 123
     
     var numLabel = UILabel()
-    var buttons: [UIButton] = []
-    let buttonNums = ["7", "8", "9", "+"]
-    //                   "4", "5", "6", "-",
-    //                   "1", "2", "3", "*",
-    //                   "AC", "0", "=", "/"]
-    
-
+    let buttonNums = ["7", "8", "9", "+",
+                      "4", "5", "6", "-",
+                      "1", "2", "3", "×",
+                      "AC", "0", "=", "÷"]
     
     
-    //버튼 한줄을 만들어서 horizontalStackView에 넣어주는 함수
-    private func makeNumButton(buttonNums: [String]) {
-        for num in buttonNums {
-            let button = UIButton()
-            //UIButton 속성
-            button.setTitle(num, for: .normal)
-            button.titleLabel?.font = .boldSystemFont(ofSize: 30)
-            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
-//            button.frame.size.height = 80
-//            button.frame.size.width = 80
-            button.layer.cornerRadius = 40
-            horizontalStackView.addArrangedSubview(button)
-        }
+    //horizontalStackView 클로저 사용
+    private func horizontalStackView(_ buttons: [UIButton])-> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .black
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
     }
     
-    //
-    var horizontalStackView: UIStackView = {
+    var verticalStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
+        stackView.axis = .vertical
         stackView.backgroundColor = .black
         stackView.spacing = 10
         stackView.distribution = .fillEqually
         return stackView
     }()
     
+    
+    //버튼 한줄을 만들어서 horizontalStackView에 넣어주는 함수
+    private func makeNumButton(buttonNums: [String]) {
+        var buttonArray: [UIButton] = []
+        
+        for num in buttonNums {
+            let button = UIButton()
+            button.setTitle(num, for: .normal)
+            button.titleLabel?.font = .boldSystemFont(ofSize: 30)
+            button.layer.cornerRadius = 40
+            button.backgroundColor = UIColor(red: 58/255, green: 58/255, blue: 58/255, alpha: 1.0)
+            
+            buttonArray.append(button)
+            
+            if buttonArray.count == 4 {
+                verticalStackView.addArrangedSubview(horizontalStackView(buttonArray))
+                buttonArray = []
+            }
+        }
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         makeNumButton(buttonNums: buttonNums)
     }
+    
+    
     
     func configureUI(){
         //속성
@@ -63,8 +79,8 @@ class ViewController: UIViewController {
         numLabel.textAlignment = .right
         numLabel.font = .boldSystemFont(ofSize: 60)
         
-        
-        [numLabel, horizontalStackView].forEach{view.addSubview($0)}
+        //view에
+        [numLabel, verticalStackView].forEach{view.addSubview($0)}
         
         
         //AutoLayout
@@ -73,16 +89,20 @@ class ViewController: UIViewController {
             $0.top.equalToSuperview().offset(200)
         }
         
-        horizontalStackView.snp.makeConstraints {
-            $0.height.equalTo(80)
-            $0.width.equalTo(350)
+        verticalStackView.snp.makeConstraints {
+            $0.height.equalTo(350)
+            $0.width.equalTo(350)  //button.frame.size.height /width = 80를 생략해도 되는 이유
             $0.top.equalTo(numLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
         }
         
-        
     }
-
     
+    
+}
+
+#Preview{
+    let preview = ViewController()
+    return preview
 }
 
