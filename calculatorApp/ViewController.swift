@@ -9,7 +9,11 @@ import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
-    var viewNum = "0"
+    var viewNum = "0" {
+        didSet {
+            numLabel.text = viewNum
+        }
+    }
     var numLabel = UILabel()
     let buttonNums = ["7", "8", "9", "+",
                       "4", "5", "6", "-",
@@ -60,6 +64,8 @@ class ViewController: UIViewController {
             
             button.addTarget(self, action: #selector(numButtonTapped), for: .touchDown)
         }
+        
+        
     }
     
     @objc
@@ -67,13 +73,19 @@ class ViewController: UIViewController {
         
         var userInput = sender.currentTitle!
         
-        if numLabel.text == "0" {
-            viewNum.removeFirst()
-            viewNum += userInput
-        } else {
+        switch userInput {
+        case "AC":
+            viewNum = "0"
+        case "=":
+            var result = calculate(expression: viewNum.replacingOccurrences(of: "×", with:  "*").replacingOccurrences(of: "÷", with: "/"))
+            viewNum = String(result ?? 0) //Nil-Coalescing Operation
+        default:
+            if numLabel.text == "0" {
+                viewNum.removeFirst()
+            }
             viewNum += userInput
         }
-        numLabel.text = viewNum
+        
     }
     
     
@@ -108,11 +120,25 @@ class ViewController: UIViewController {
             $0.top.equalToSuperview().offset(200)
         }
         
+        
         verticalStackView.snp.makeConstraints {
             $0.height.equalTo(350)
             $0.width.equalTo(350)
             $0.top.equalTo(numLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
+        }
+    }
+    
+    /// 수식 문자열을 넣으면 계산해주는 메서드.
+    ///
+    /// 예를 들어 expression 에 "1+2+3" 이 들어오면 6 을 리턴한다.
+    /// 잘못된 형식의 수식을 넣으면 앱이 크래시 난다. ex) "1+2++"
+    func calculate(expression: String) -> Int? {
+        let expression = NSExpression(format: expression)
+        if let result = expression.expressionValue(with: nil, context: nil) as? Int {
+            return result
+        } else {
+            return nil
         }
     }
     
