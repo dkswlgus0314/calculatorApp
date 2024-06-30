@@ -7,6 +7,16 @@ iOS 입문 주차에서 배운 내용으로 코드베이스를 이용해 앱을 
 <br/> <br/> <br/> 
 
 
+### 실행 모습
+
+---
+
+
+![Simulator Screen Recording - iPhone 15 Pro - 2024-07-01 at 02 01 12](https://github.com/dkswlgus0314/calculatorApp/assets/64121323/3d667d73-9e35-4bef-83b1-1dd1a6377284)
+
+<br/> <br/> <br/> 
+
+
 ### 구현 단계 Level 1~8
 
 ---
